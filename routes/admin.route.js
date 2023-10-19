@@ -10,7 +10,7 @@ AdminRoute.post("/signup",async(req,res)=>{
     const {email,password} = req.body
     try {
         const Admin = await AdminModel.find({email});
-        console.log(Admin)
+        
         if(Admin.length>0){
             res.send({msg:"Admin Account is allready created"})
         }
@@ -35,14 +35,14 @@ AdminRoute.post("/login",async(req,res)=>{
     const {email,password} = req.body;
     try {
         const user = await AdminModel.findOne({email});
-        console.log(user)
+        
         if(!user){
             res.send({"msg":"please signup first"})
         }
         else{
             bcrypt.compare(password, user.password, function(err, result) {
-                if(err){
-                    res.send({err:"please enter valid password"})
+                if(!err){
+                    res.send({msg:"please enter valid password"})
                 }
                 else{
                     const token = jwt.sign({ adminID: user._id}, 'solo_project');
