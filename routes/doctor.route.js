@@ -2,7 +2,7 @@ const express = require("express");
 const { DoctorModel } = require("../models/doctors.model");
 const DoctorRoute = express.Router();
 const axios = require("axios");
-const API_KEY = "15106e32380f4441a9e659ec6346fa9c";
+const API_KEY = "125c85ac34cf44adb8a0dedab61ca3da";
 const jwt = require("jsonwebtoken");
 
 async function geocodeCity(city) {
