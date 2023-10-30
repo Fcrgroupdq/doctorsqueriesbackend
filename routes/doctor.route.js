@@ -137,7 +137,7 @@ DoctorRoute.get("/:id", async (req, res) => {
 });
 
 DoctorRoute.get("/doctors/near", async (req, res) => {
-  const { lat: latitude, lon: longitude, cat, status, day, min, max } = req.query;
+  const { lat: latitude, lon: longitude, cat, status, day, min, max,query } = req.query;
 
   try {
     const distances = [];
@@ -146,8 +146,11 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
       .map((term) => `(?=.*${term})`)
       .join("");
     const query = {
-      spacility: { $regex: regexPattern, $options: "i" },
-      status,
+      $or: [
+        { spacility:{ $regex: regexPattern, $options: "i" } },
+        { location: { $regex: query, $options: "i" } },
+        // Add any other search criteria here
+      ],
     };
 
     if (day) {
@@ -159,28 +162,28 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
     }
 
     const doctors = await DoctorModel.find(query);
-    for (const person of doctors) {
-      const { location: doctorlocation } = person;
-      const location = await geocodeCity(`${doctorlocation},India, india`);
+    // for (const person of doctors) {
+    //   const { location: doctorlocation } = person;
+    //   const location = await geocodeCity(`${doctorlocation},India, india`);
 
-      if (location) {
-        const distance = calculateDistance(
-          latitude,
-          longitude,
-          location.latitude,
-          location.longitude
-        );
-        if (distance <= 1000) {
-          person.set("distance", distance);
-          distances.push({ person, distance });
-        }
-      }
-    }
+    //   if (location) {
+    //     const distance = calculateDistance(
+    //       latitude,
+    //       longitude,
+    //       location.latitude,
+    //       location.longitude
+    //     );
+    //     if (distance <= 1000) {
+    //       person.set("distance", distance);
+    //       distances.push({ person, distance });
+    //     }
+    //   }
+    // }
 
-    distances.sort((a, b) => a.distance - b.distance);
-    const nearestPersons = distances.map(({ person }) => person);
+    // distances.sort((a, b) => a.distance - b.distance);
+    // const nearestPersons = distances.map(({ person }) => person);
 
-    res.json(nearestPersons);
+    res.json(doctors);
   } catch (error) {
     // Handle errors appropriately
     console.error(error);
