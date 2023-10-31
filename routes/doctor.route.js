@@ -137,61 +137,121 @@ DoctorRoute.get("/:id", async (req, res) => {
 });
 
 DoctorRoute.get("/doctors/near", async (req, res) => {
-  const { lat: latitude, lon: longitude, cat, status, day, min, max,query } = req.query;
+  const {
+    lat: latitude,
+    lon: longitude,
+    cat,
+    status,
+    day,
+    min,
+    max,
+    query: searchQuery,
+  } = req.query;
 
   try {
+    // Check if both 'cat' and 'query' parameters are provided
+    // if (!cat || !searchQuery) {
+    //   return res.status(400).json({ error: "Both 'cat' and 'query' parameters are required." });
+    // }
+
     const distances = [];
-    regexPattern = cat
-      .split(" ")
-      .map((term) => `(?=.*${term})`)
-      .join("");
+    const regexPattern = new RegExp(cat, "i"); // Case-insensitive regex pattern for category
+    const locationRegexPattern = new RegExp(searchQuery, "i"); // Case-insensitive regex pattern for location
+
     const query = {
-      $or: [
-        { spacility:{ $regex: regexPattern, $options: "i" } },
-        { location: { $regex: query, $options: "i" } },
-        // Add any other search criteria here
+      $and: [
+        {
+          spacility: regexPattern, // Match category using regex
+        },
+        {
+          location: locationRegexPattern, // Match location using regex
+        },
+        { $or: [ // Additional criteria can be added here if needed
+          { day: day },
+          { fees: { $gte: min, $lte: max } },
+        ]},
       ],
     };
 
-    if (day) {
-      query.Availability = { $in: [day] };
-    }
-
-    if (min && max) {
-      query.fees = { $gte: min, $lte: max };
-    }
-
     const doctors = await DoctorModel.find(query);
-    // for (const person of doctors) {
-    //   const { location: doctorlocation } = person;
-    //   const location = await geocodeCity(`${doctorlocation},India, india`);
-
-    //   if (location) {
-    //     const distance = calculateDistance(
-    //       latitude,
-    //       longitude,
-    //       location.latitude,
-    //       location.longitude
-    //     );
-    //     if (distance <= 1000) {
-    //       person.set("distance", distance);
-    //       distances.push({ person, distance });
-    //     }
-    //   }
-    // }
-
-    // distances.sort((a, b) => a.distance - b.distance);
-    // const nearestPersons = distances.map(({ person }) => person);
 
     res.json(doctors);
   } catch (error) {
-    // Handle errors appropriately
     console.error(error);
     res.status(500).json({ error: "An error occurred" });
   }
 });
 
 
+
+// DoctorRoute.get("/doctors/near", async (req, res) => {
+//   const {
+//     lat: latitude,
+//     lon: longitude,
+//     cat,
+//     status,
+//     day,
+//     min,
+//     max,
+//     query: searchQuery,
+//   } = req.query;
+
+//   try {
+//     const distances = [];
+//     let regexPattern = cat
+//       .split(" ")
+//       .map((term) => `(?=.*${term})`)
+//       .join("");
+
+//     let regexPattern2 = searchQuery
+//       .split(" ")
+//       .map((term) => `(?=.*${term})`)
+//       .join("");
+//     const query = {
+//       $or: [
+//         { spacility: { $regex: regexPattern, $options: "i" } },
+//         { location: { $regex: regexPattern2, $options: "i" } },
+//         // Add any other search criteria here
+//       ],
+//     };
+
+//     if (day) {
+//       query.Availability = { $in: [day] };
+//     }
+
+//     if (min && max) {
+//       query.fees = { $gte: min, $lte: max };
+//     }
+
+//     const doctors = await DoctorModel.find(query);
+//     // for (const person of doctors) {
+//     //   const { location: doctorlocation } = person;
+//     //   const location = await geocodeCity(`${doctorlocation},India, india`);
+
+//     //   if (location) {
+//     //     const distance = calculateDistance(
+//     //       latitude,
+//     //       longitude,
+//     //       location.latitude,
+//     //       location.longitude
+//     //     );
+//     //     if (distance <= 1000) {
+//     //       person.set("distance", distance);
+//     //       distances.push({ person, distance });
+//     //     }
+//     //   }
+//     // }
+
+//     // distances.sort((a, b) => a.distance - b.distance);
+//     // const nearestPersons = distances.map(({ person }) => person);
+
+//     res.json(doctors);
+//   } catch (error) {
+//     // Handle errors appropriately
+//     console.error(error);
+//     res.status(500).json({ error: "An error occurred" });
+//   }
+// });
 
 DoctorRoute.post("/", async (req, res) => {
   try {
