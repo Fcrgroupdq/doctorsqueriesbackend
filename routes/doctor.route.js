@@ -150,13 +150,13 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
 
   try {
     // Check if both 'cat' and 'query' parameters are provided
-    // if (!cat || !searchQuery) {
-    //   return res.status(400).json({ error: "Both 'cat' and 'query' parameters are required." });
-    // }
+    if (!cat || !searchQuery) {
+      return res.status(400).json({ error: "Both 'cat' and 'query' parameters are required." });
+    }
 
     const distances = [];
     const regexPattern = new RegExp(cat, "i"); // Case-insensitive regex pattern for category
-    const locationRegexPattern = new RegExp(searchQuery, "i"); // Case-insensitive regex pattern for location
+    const locationRegexPattern = new RegExp(`.*${searchQuery}.*`, "i"); // Case-insensitive regex pattern for location
 
     const query = {
       $and: [
@@ -181,6 +181,7 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
 
 
 
