@@ -155,25 +155,25 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
     }
 
     const distances = [];
-    const regexPattern = new RegExp(cat, "i"); // Case-insensitive regex pattern for category
-    const locationRegexPattern = new RegExp(`.*${searchQuery}.*`, "i"); // Case-insensitive regex pattern for location
+    // const regexPattern = new RegExp(cat, "i"); // Case-insensitive regex pattern for category
+    const regexPattern = searchQuery.split(' ').map(term => `(?=.*${term})`).join('');
 
-    const query = {
-      $and: [
-        {
-          spacility: regexPattern, // Match category using regex
-        },
-        {
-          location: locationRegexPattern, // Match location using regex
-        },
-        { $or: [ // Additional criteria can be added here if needed
-          { day: day },
-          { fees: { $gte: min, $lte: max } },
-        ]},
-      ],
-    };
+    // const query = {
+    //   $and: [
+    //     {
+    //       spacility: regexPattern, // Match category using regex
+    //     },
+    //     {
+    //       location: locationRegexPattern, // Match location using regex
+    //     },
+    //     { $or: [ // Additional criteria can be added here if needed
+    //       { day: day },
+    //       { fees: { $gte: min, $lte: max } },
+    //     ]},
+    //   ],
+    // };
 
-    const doctors = await DoctorModel.find(query);
+    const doctors = await DoctorModel.find({ location: { $regex: regexPattern, $options: 'i' }, spacility: cat });
 
     res.json(doctors);
   } catch (error) {
