@@ -151,29 +151,31 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
   try {
     // Check if both 'cat' and 'query' parameters are provided
     if (!cat || !searchQuery) {
-      return res.status(400).json({ error: "Both 'cat' and 'query' parameters are required." });
+      return res
+        .status(400)
+        .json({ error: "Both 'cat' and 'query' parameters are required." });
     }
 
     const distances = [];
     // const regexPattern = new RegExp(cat, "i"); // Case-insensitive regex pattern for category
-    const regexPattern = searchQuery.split(' ').map(term => `(?=.*${term})`).join('');
+    const regexPattern = searchQuery
+      .split(" ")
+      .map((term) => `(?=.*${term})`)
+      .join("");
+    const query = {
+      location: { $regex: regexPattern, $options: "i" },
+      spacility: cat,
+    };
 
-    // const query = {
-    //   $and: [
-    //     {
-    //       spacility: regexPattern, // Match category using regex
-    //     },
-    //     {
-    //       location: locationRegexPattern, // Match location using regex
-    //     },
-    //     { $or: [ // Additional criteria can be added here if needed
-    //       { day: day },
-    //       { fees: { $gte: min, $lte: max } },
-    //     ]},
-    //   ],
-    // };
+    if (day) {
+      query.Availability = { $in: [day] };
+    }
 
-    const doctors = await DoctorModel.find({ location: { $regex: regexPattern, $options: 'i' }, spacility: cat });
+    if (min && max) {
+      query.fees = { $gte: min, $lte: max };
+    }
+
+    const doctors = await DoctorModel.find(query);
 
     res.json(doctors);
   } catch (error) {
@@ -181,9 +183,6 @@ DoctorRoute.get("/doctors/near", async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 });
-
-
-
 
 // DoctorRoute.get("/doctors/near", async (req, res) => {
 //   const {
