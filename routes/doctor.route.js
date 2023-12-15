@@ -113,7 +113,7 @@ DoctorRoute.get("/approved", async (req, res) => {
     const totalNumberOfPages = Math.ceil(totalPendingDoctorsCount / itemsPerPage);
 
     const pendingDoctors = await DoctorModel
-      .find({ status: "Not Verified" })
+      .find({ status: "approved" })
       .limit(itemsPerPage)
       .skip(skipCount);
 
