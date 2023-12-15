@@ -87,8 +87,14 @@ DoctorRoute.patch("/update/:id", async (req, res) => {
 
 
 DoctorRoute.get("/all", async (req, res) => {
+  const status = req.query.status
   try {
-    const data = await DoctorModel.find().select("-image");
+    const query = {}
+    if(status){
+      query['status'] = status
+    }
+    console.log(query)
+    const data = await DoctorModel.find(query).select("-image");
     res.send(data);
   } catch (error) {
     res.status(500).send({ error: "An error occurred while fetching doctors." });
