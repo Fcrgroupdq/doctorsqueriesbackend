@@ -7,7 +7,7 @@ const { OtpModel } = require("../models/otp.model");
 // Store OTPs temporarily (In production, use a database)
 const otpStore = {};
 
-// // Generate a random OTP
+// Generate a random OTP
 function generateOTP() {
   return crypto.randomInt(1000, 9999).toString();
 }
