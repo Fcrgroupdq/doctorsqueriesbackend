@@ -21,9 +21,6 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 
-// In your Node.js server
-
-// Node.js module for making HTTP requests
 
 // Function to fetch the logo image
 function fetchImage(imageUrl, callback) {
@@ -99,11 +96,7 @@ server.post('/api/appointments/generate-pdf', (req, res) => {
   });
 });
 
-// ... (rest of your code)
 
-// ... (rest of your code)
-
-// ... (use your middleware and routes)
 
 // Middleware
 server.use("/banner", BannerRoute);

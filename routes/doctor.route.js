@@ -84,23 +84,45 @@ DoctorRoute.patch("/update/:id", async (req, res) => {
   }
 });
 
-
-
 DoctorRoute.get("/all", async (req, res) => {
-  const status = req.query.status
+  const status = req.query.status;
   try {
-    const query = {}
-    if(status){
-      query['status'] = status
+    const query = {};
+    if (status) {
+      query["status"] = status;
     }
-    console.log(query)
-    const data = await DoctorModel.find(query);
+    console.log(query);
+    const data = await DoctorModel.find(query).select("-image");
     res.send(data);
   } catch (error) {
-    res.status(500).send({ error: "An error occurred while fetching doctors." });
+    res
+      .status(500)
+      .send({ error: "An error occurred while fetching doctors." });
   }
 });
 
+DoctorRoute.get("/approved", async (req, res) => {
+  const { page } = req.query;
+  try {
+    const ApprovedDoctor = await DoctorModel.find({ status: "approved" })
+      .limit(15)
+      .skip((page - 1) * 15);
+    res.send(ApprovedDoctor);
+  } catch (error) {
+    res.send({ msg: "fecing problem while getting approved doctors" });
+  }
+});
+DoctorRoute.get("/pending", async (req, res) => {
+  const { page } = req.query;
+  try {
+    const ApprovedDoctor = await DoctorModel.find({ status: "Not Verified" })
+      .limit(15)
+      .skip((page - 1) * 15);
+    res.send(ApprovedDoctor);
+  } catch (error) {
+    res.send({ msg: "fecing problem while getting approved doctors" });
+  }
+});
 
 DoctorRoute.get("/", async (req, res) => {
   const { page, limit, spacility, token, status } = req.query;
