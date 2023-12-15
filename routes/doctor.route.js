@@ -84,6 +84,8 @@ DoctorRoute.patch("/update/:id", async (req, res) => {
   }
 });
 
+
+
 DoctorRoute.get("/all", async (req, res) => {
   try {
     const data = await DoctorModel.find();
