@@ -106,7 +106,7 @@ DoctorRoute.get("/approved", async (req, res) => {
   try {
     const ApprovedDoctor = await DoctorModel.find({ status: "approved" })
       .limit(15)
-      .skip((page - 1) * 15);
+      .skip((page||1 - 1) * 15);
     res.send(ApprovedDoctor);
   } catch (error) {
     res.send({ msg: "fecing problem while getting approved doctors" });
@@ -117,7 +117,7 @@ DoctorRoute.get("/pending", async (req, res) => {
   try {
     const ApprovedDoctor = await DoctorModel.find({ status: "Not Verified" })
       .limit(15)
-      .skip((page - 1) * 15);
+      .skip((page||1 - 1) * 15);
     res.send(ApprovedDoctor);
   } catch (error) {
     res.send({ msg: "fecing problem while getting approved doctors" });
