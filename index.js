@@ -20,6 +20,7 @@ const server = express();
 
 server.use(express.json());
 server.use(cors());
+
 // In your Node.js server
 
 // Node.js module for making HTTP requests

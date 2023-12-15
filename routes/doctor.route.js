@@ -88,12 +88,13 @@ DoctorRoute.patch("/update/:id", async (req, res) => {
 
 DoctorRoute.get("/all", async (req, res) => {
   try {
-    const data = await DoctorModel.find();
+    const data = await DoctorModel.find().select("-image");
     res.send(data);
   } catch (error) {
-    res.send(error);
+    res.status(500).send({ error: "An error occurred while fetching doctors." });
   }
 });
+
 
 DoctorRoute.get("/", async (req, res) => {
   const { page, limit, spacility, token, status } = req.query;
