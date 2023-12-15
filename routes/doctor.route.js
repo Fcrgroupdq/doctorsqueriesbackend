@@ -103,26 +103,57 @@ DoctorRoute.get("/all", async (req, res) => {
 
 DoctorRoute.get("/approved", async (req, res) => {
   const { page } = req.query;
+  const itemsPerPage = 15;
+
   try {
-    const ApprovedDoctor = await DoctorModel.find({ status: "approved" })
-      .limit(15)
-      .skip((page||1 - 1) * 15);
-    res.send(ApprovedDoctor);
+    const pageNumber = parseInt(page, 10) || 1;
+    const skipCount = (pageNumber - 1) * itemsPerPage;
+
+    const totalPendingDoctorsCount = await DoctorModel.countDocuments({ status: "approved" });
+    const totalNumberOfPages = Math.ceil(totalPendingDoctorsCount / itemsPerPage);
+
+    const pendingDoctors = await DoctorModel
+      .find({ status: "Not Verified" })
+      .limit(itemsPerPage)
+      .skip(skipCount);
+
+    res.send({
+      totalPages: totalNumberOfPages,
+      currentPage: pageNumber,
+      pendingDoctors
+    });
   } catch (error) {
-    res.send({ msg: "fecing problem while getting approved doctors" });
+    res.status(500).send({ msg: "Facing problem while getting pending doctors", error });
   }
 });
+
+
 DoctorRoute.get("/pending", async (req, res) => {
   const { page } = req.query;
+  const itemsPerPage = 15;
+
   try {
-    const ApprovedDoctor = await DoctorModel.find({ status: "Not Verified" })
-      .limit(15)
-      .skip((page||1 - 1) * 15);
-    res.send(ApprovedDoctor);
+    const pageNumber = parseInt(page, 10) || 1;
+    const skipCount = (pageNumber - 1) * itemsPerPage;
+
+    const totalPendingDoctorsCount = await DoctorModel.countDocuments({ status: "Not Verified" });
+    const totalNumberOfPages = Math.ceil(totalPendingDoctorsCount / itemsPerPage);
+
+    const pendingDoctors = await DoctorModel
+      .find({ status: "Not Verified" })
+      .limit(itemsPerPage)
+      .skip(skipCount);
+
+    res.send({
+      totalPages: totalNumberOfPages,
+      currentPage: pageNumber,
+      pendingDoctors
+    });
   } catch (error) {
-    res.send({ msg: "fecing problem while getting approved doctors" });
+    res.status(500).send({ msg: "Facing problem while getting pending doctors", error });
   }
 });
+
 
 DoctorRoute.get("/", async (req, res) => {
   const { page, limit, spacility, token, status } = req.query;
