@@ -94,7 +94,7 @@ DoctorRoute.get("/all", async (req, res) => {
       query['status'] = status
     }
     console.log(query)
-    const data = await DoctorModel.find(query).select("-image");
+    const data = await DoctorModel.find(query);
     res.send(data);
   } catch (error) {
     res.status(500).send({ error: "An error occurred while fetching doctors." });
