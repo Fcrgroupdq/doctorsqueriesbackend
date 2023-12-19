@@ -16,7 +16,7 @@ HospitalRoute.patch("/update/:id", async (req, res) => {
     const updatedData = req.body;
     const id = req.params.id;
     const hospital = await HospitalModel.findByIdAndUpdate(
-      { _id, id },
+      { _id: id },
       updatedData
     );
     res.send({ msg: `hospital data updated with id ${id}` });
@@ -38,7 +38,7 @@ HospitalRoute.delete("/delete/:id", async (req, res) => {
 HospitalRoute.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const hospital = await HospitalModel.findById(id);
     res.send(hospital);
   } catch (error) {
