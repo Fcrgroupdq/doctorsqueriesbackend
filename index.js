@@ -19,19 +19,8 @@ const { BannerRoute } = require("./routes/banner.route");
 const server = express();
 
 server.use(express.json());
+server.use(cors());
 
-server.use(cors({
-  origin: ['http://localhost:3000', 'https://www.doctorsqueries.com/'], // Add multiple origins here
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true // Enable credentials (if needed)
-}));
-
-server.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://www.doctorsqueries.com');
-  // Add other CORS headers if needed
-  // ...
-  next();
-});
 
 // Function to fetch the logo image
 function fetchImage(imageUrl, callback) {
