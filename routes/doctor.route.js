@@ -159,7 +159,7 @@ DoctorRoute.get("/", async (req, res) => {
   const { page, limit, spacility, token, status } = req.query;
   const query = {};
   const newPage = page || 1;
-  const newLimit = limit || 6;
+  const newLimit = limit || 12;
   const skip = (newPage - 1) * newLimit;
 
   if (status) {
