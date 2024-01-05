@@ -24,6 +24,7 @@
     "nodemon": "^2.0.22",
     "pdfkit": "^0.13.0",
     "pdfmake": "^0.2.7",
+    "razorpay": "^2.9.2",
     "sendgrid": "^5.2.3",
     "uuid": "^9.0.1"
   }

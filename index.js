@@ -15,11 +15,15 @@ const { AppointmentRoute } = require("./routes/appointment.route");
 const { OtpRoute } = require("./routes/otp.route");
 const { BlogRoute } = require("./routes/blog.route");
 const { BannerRoute } = require("./routes/banner.route");
+const { paymentRoute } = require("./routes/payment.route");
 
 const server = express();
 
 server.use(express.json());
 server.use(cors());
+server.use(express.urlencoded({extended:true}));
+
+
 
 
 // Function to fetch the logo image
@@ -101,6 +105,8 @@ server.post('/api/appointments/generate-pdf', (req, res) => {
 // Middleware
 server.use("/banner", BannerRoute);
 server.use("/user", UserRoute);
+server.use("/payment",paymentRoute)
+
 server.use("/admin", AdminRoute);
 server.use("/reviews", ReviewRoute);
 server.use("/doctors", DoctorRoute);
