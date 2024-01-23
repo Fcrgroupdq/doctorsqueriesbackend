@@ -5,6 +5,7 @@ const BlogSchema = mongoose.Schema({
     Title:{type:String,required:true},
     MetaTitle :{type:String},
     MetaDescription:{type:String,required:true},
+    Description:{type:String,required:true},
     MetaTag:{type:String,required:true},
     FeaturedImage:{type:String,required:true},
     Auther:{Type:String}
