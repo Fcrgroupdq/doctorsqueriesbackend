@@ -15,7 +15,7 @@ BlogRoute.get("/", async (req, res) => {
 BlogRoute.get("/:MetaTitle", async (req,res) => {
   try {
     const  {MetaTitle} = req.params;
-    const blogs = await BlogModel.find({MetaTitle});
+    const blogs = await BlogModel.find({_id:MetaTitle});
     res.send(blogs);
   } catch (error) {
     res.send({ err: error });
