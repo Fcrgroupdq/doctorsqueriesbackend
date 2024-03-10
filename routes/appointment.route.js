@@ -31,7 +31,7 @@ AppointmentRoute.post("/", async (req, res) => {
   try {
     // const { token } = req.body;
     // const decode = jwt.verify(token, "solo_project");
-    // if (decode) {
+    // if (true) {
       // req.body.userId = decode.userID;
       // req.body.userId = null;
       // delete req.body.token;
@@ -39,9 +39,9 @@ AppointmentRoute.post("/", async (req, res) => {
       const newAppointment = new AppointMentModel(req.body);
       const savedAppointment = await newAppointment.save();
       res.status(201).json({ msg: "Appointment saved successfully" });
-    } else {
-      res.send({ msg: "Please Login !!!" });
-    }
+    // } else {
+    //   res.send({ msg: "Please Login !!!" });
+    // }
   } catch (error) {
     console.error("Error while creating an appointment:", error);
     res.status(500).json({ msg: "Failed to create an appointment" });
