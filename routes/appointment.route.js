@@ -29,12 +29,12 @@ AppointmentRoute.get("/", async (req, res) => {
 
 AppointmentRoute.post("/", async (req, res) => {
   try {
-    const { token } = req.body;
-    const decode = jwt.verify(token, "solo_project");
-    if (decode) {
+    // const { token } = req.body;
+    // const decode = jwt.verify(token, "solo_project");
+    // if (decode) {
       // req.body.userId = decode.userID;
-      req.body.userId = null;
-      delete req.body.token;
+      // req.body.userId = null;
+      // delete req.body.token;
       
       const newAppointment = new AppointMentModel(req.body);
       const savedAppointment = await newAppointment.save();
