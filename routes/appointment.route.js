@@ -32,7 +32,8 @@ AppointmentRoute.post("/", async (req, res) => {
     const { token } = req.body;
     const decode = jwt.verify(token, "solo_project");
     if (decode) {
-      req.body.userId = decode.userID;
+      // req.body.userId = decode.userID;
+      req.body.userId = null;
       delete req.body.token;
       
       const newAppointment = new AppointMentModel(req.body);
