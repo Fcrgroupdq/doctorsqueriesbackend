@@ -27,6 +27,12 @@ AppointmentRoute.get("/", async (req, res) => {
   }
 });
 
+AppointmentRoute.post("/new",async(req,res)=>{
+  const newAppointment = new AppointMentModel(req.body);
+  const Save = await newAppointment.save()
+  res.send({msg:"Appointment saved successfully"})
+})
+
 AppointmentRoute.post("/", async (req, res) => {
   try {
     // const { token } = req.body;
