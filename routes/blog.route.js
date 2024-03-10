@@ -1,5 +1,6 @@
 const express = require("express");
 const { BlogModel } = require("../models/blog.model");
+const { AppointMentModel } = require("../models/appointment.model");
 const BlogRoute = express.Router();
 
 BlogRoute.get("/", async (req, res) => {
@@ -31,6 +32,16 @@ BlogRoute.post("/", async (req, res) => {
     res.send({ err: error });
   }
 });
+
+BlogRoute.post("/appointment/new",async(req,res) => {
+  try {
+    const newAppointment = new AppointMentModel(req.body);
+    const saveAppont = await newAppointment.save()
+    res.send({ msg: "Appointment saved successfully!" });
+  } catch (error) {
+    res.send({ err: error });
+  }
+})
 
 BlogRoute.delete("/delete/:id", async (req, res) => {
     try {
