@@ -3,6 +3,7 @@ const pdfMake = require("pdfmake");
 const PDFDocument = require("pdfkit");
 const https = require("https");
 
+
 const cors = require("cors");
 const { connection } = require("./db");
 const { UserRoute } = require("./routes/user.route");
@@ -19,8 +20,11 @@ const { paymentRoute } = require("./routes/payment.route");
 
 const server = express();
 
-server.use(express.json());
+
+
 server.use(cors());
+server.use(express.json());
+
 server.use(express.urlencoded({extended:true}));
 
 
