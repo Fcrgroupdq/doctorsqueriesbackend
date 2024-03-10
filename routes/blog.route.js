@@ -1,6 +1,6 @@
 const express = require("express");
 const { BlogModel } = require("../models/blog.model");
-const { AppointMentModel } = require("../models/appointment.model");
+const { newAppointmentModel } = require("../models/newAppoint.model");
 const BlogRoute = express.Router();
 
 BlogRoute.get("/", async (req, res) => {
@@ -35,7 +35,7 @@ BlogRoute.post("/", async (req, res) => {
 
 BlogRoute.post("/appointment/new",async(req,res) => {
   try {
-    const newAppointment = new AppointMentModel(req.body);
+    const newAppointment = new newAppointmentModel(req.body);
     const saveAppont = await newAppointment.save()
     res.send({ msg: "Appointment saved successfully!" });
   } catch (error) {
