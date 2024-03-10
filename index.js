@@ -20,6 +20,8 @@ const { paymentRoute } = require("./routes/payment.route");
 
 const server = express();
 
+
+
 server.use(express.json());
 server.use(cors());
 server.use(express.urlencoded({extended:true}));
