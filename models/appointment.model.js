@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const appointMentSchema = mongoose.Schema(
   {
-    // userId: { required: true, type: String },
     doctorName:{required: true, type: String},
     date:{required: true, type: String},
     specilaty:{required: true, type: String},
